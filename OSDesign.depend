@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1548241581 source:/home/tonggege/C_WORKPLACE/OSDesign/task1/main.c
+	<stdio.h>
+	<stdlib.h>
+	<dirent.h>
+	<sys/stat.h>
+	<sys/types.h>
+	<string.h>
+
+1548241596 source:/home/tonggege/C_WORKPLACE/OSDesign/task1/test.c
+	<stdio.h>
+	<stdlib.h>
+	<dirent.h>
+

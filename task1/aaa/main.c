@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include<stdlib.h>
-#include<dirent.h>
 #include<sys/stat.h>
 #include<sys/types.h>
 #include<string.h>
@@ -10,18 +9,9 @@ void copy(char * src, char * dst);
 
 void recurse_copy(char * src, char * dst);
 
-
-int main(int argc, char const *argv[])
-{
-	copy(argv[1],argv[2]);
-	return 0;
-}
-/*
-int main2(int argc, char	* argv[]) {
-    printf("%d",argc);
-	printf("%s\n\n%s",argv[0],argv[0]);
+int main(int argc, char	* argv[]) {
 	if (argc != 3) {
-		printf("å‘½ä»¤è¾“å…¥æœ‰è¯¯ï¼");
+		printf("ÃüÁîÊäÈëÓĞÎó£¡");
 		return 0;
 	}
 	recurse_copy(argv[1], argv[2]);
@@ -29,13 +19,12 @@ int main2(int argc, char	* argv[]) {
 }
 
 
-//é€’å½’å¤åˆ¶
+//µİ¹é¸´ÖÆ
 void recurse_copy(char * src, char * dst) {
-	printf("recure_copy,src is %s, dst is %s\n",src,dst);
-	//é¦–å…ˆåˆ¤æ–­æ˜¯æ–‡ä»¶è¿˜æ˜¯ç›®å½•
+	//Ê×ÏÈÅĞ¶ÏÊÇÎÄ¼ş»¹ÊÇÄ¿Â¼
 	struct stat filestat;
 	stat(src, &filestat);
-	//è®¾ç½®ç›®æ ‡æ–‡ä»¶å
+	//ÉèÖÃÄ¿±êÎÄ¼şÃû
 	char dstPath[256];
 	char * pos = strrchr(src, '/');
 	if (dst[strlen(dst) - 1] == '/')
@@ -44,56 +33,58 @@ void recurse_copy(char * src, char * dst) {
 		sprintf(dstPath, "%s/%s", dst, pos + 1);
 	printf("dst is %s", dstPath);
 
-	if (S_ISDIR(filestat.st_mode)) {	//å¦‚æœæ˜¯ç›®å½•ç±»å‹
+	if (S_ISDIR(filestat.st_mode)) {	//Èç¹ûÊÇÄ¿Â¼ÀàĞÍ
 
-		//åˆ›å»ºå¯¹åº”çš„ç›®å½•
+		//´´½¨¶ÔÓ¦µÄÄ¿Â¼
 		mkdir(dstPath, filestat.st_mode);
 
 		DIR * dir = opendir(src);
 		struct dirent *drt;
 		while ((drt = readdir(dir))!=NULL) {
-			//åˆ¤æ–­ç¡¬é“¾æ¥.å’Œ..ï¼Œä¸èƒ½å¯¹å…¶è¿›è¡Œé€’å½’
+			//ÅĞ¶ÏÓ²Á´½Ó.ºÍ..£¬²»ÄÜ¶ÔÆä½øĞĞµİ¹é
 			if (strcmp(drt->d_name, ".") != 0 && strcmp(drt->d_name, "..") != 0) {
-				char * subsrc = drt->d_name;//å­æ–‡ä»¶å¤¹çš„ç±»å‹
+				char * subsrc = drt->d_name;//×ÓÎÄ¼ş¼ĞµÄÀàĞÍ
 				recurse_copy(subsrc, dstPath);
 			}
 		}
 		closedir(dir);
 	}
-	else if (S_ISREG(filestat.st_mode)) {	//å¦‚æœæ˜¯å¸¸è§„æ–‡ä»¶åˆ™ç›´æ¥å¤åˆ¶
+	else if (S_ISREG(filestat.st_mode)) {	//Èç¹ûÊÇ³£¹æÎÄ¼şÔòÖ±½Ó¸´ÖÆ
 		copy(src, dstPath,filestat.st_mode);
 	}
 }
 
-*/
 
 /**
- * ç®€å•çš„åŸå­æ‹·è´ï¼Œå…¶ä¸­src: xxx/xxx/xx.abc
-	st_modeè¡¨ç¤ºæƒé™
+ * ¼òµ¥µÄÔ­×Ó¿½±´£¬ÆäÖĞsrc: xxx/xxx/xx.abc
+	st_mode±íÊ¾È¨ÏŞ
  */
-void copy(char * src, char * dst) {
+void copy(char * src, char * dst,int st_mode) {
 	FILE * fpr = fopen(src, "rb");
 	FILE * fpw = fopen(dst, "wb");
 
 	if (fpr == NULL) {
-		printf("æºæ–‡ä»¶æ–‡ä»¶æ‰“å¼€é”™è¯¯ï¼");
+		printf("Ô´ÎÄ¼şÎÄ¼ş´ò¿ª´íÎó£¡");
 		return;
 	}
 	if (fpw == NULL) {
-		printf("ç›®æ ‡æ–‡ä»¶æ‰“å¼€å¤±è´¥");
+		printf("Ä¿±êÎÄ¼ş´ò¿ªÊ§°Ü");
 		fclose(fpr);
 		return;
 	}
 	char buffer[1024];
-	int num;    //freadè¿”å›é¡¹ç›®çš„ä¸ªæ•°
+	int num;    //fread·µ»ØÏîÄ¿µÄ¸öÊı
 	while ((num = fread(buffer, sizeof(char), 1024, fpr)) != 0) {
-		printf("num is %d\n", num);
-		fwrite(buffer, sizeof(char), num * sizeof(char), fpw);
+		printf("num is %d", num);
+		fwrite(fpw, sizeof(char), num * sizeof(char), fpw);
 	}
 	fclose(fpr);
 	fclose(fpw);
-	//ä¿®æ”¹æƒé™
-	//chmod(dst, st_mode);
+	//ĞŞ¸ÄÈ¨ÏŞ
+	chmod(dst, st_mode);
 	return;
 }
 
+int getLastNamePos(char * filename) {
+
+}
