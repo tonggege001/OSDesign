@@ -84,6 +84,7 @@ int chrdev_release(struct inode *inode, struct file *file)
 ssize_t chrdev_read(struct file *file, char __user *user, size_t t, loff_t *f)
 {	
 	ssize_t count = 0;
+	/*
 	if(pos == 0){
 		printk("设备无内容可读\n");
 		*f = pos;
@@ -91,32 +92,54 @@ ssize_t chrdev_read(struct file *file, char __user *user, size_t t, loff_t *f)
 	}
 	if(pos<t){
 		printk("设备读取资源过多，进行截断\n");
-		count = copy_to_user(user, buf, pos);
-		pos += count;
+		int ch = 0;
+		count = 0;
+		for(int i = pos;i>=0 && ch >= 0;i--){
+			ch = copy_to_user(user+count,buf+i,1);
+			if(ch >= 0){
+				count += ch;
+			}
+			else{
+				printk("读写发生截断");
+				break;
+			}
+		}
+		pos -= count;
 	}
-	else{
-
-		count = copy_to_user(user,buf,t);
-		pos += count;
+	else{	//pos可读超过t
+		int ch = 0;
+		count = 0;
+		for(int i = 0;i<t;i++){
+			ch = copy_to_user(user+i,buf+pos-i,t);
+			count += ch;
+		}
+		pos -= count;
 	}
 	*f = pos;
-	return count;
+	*/
+	if(t <= pos){
+		count = t;
+	}
+	else{
+		count = pos;
+	}
+	int num = copy_to_user(user,buf+(pos-t),count);
+	pos -= t;
+	return num;
 }
 
 ssize_t chrdev_write(struct file *file, const char __user *user, size_t t, loff_t *f)
 {
 	ssize_t count;
-	if(pos == BUFFERSIZE)
-	if(count = copy_from_user(buf,user,500))	return -4;
-	return count;
+
+	if(BUFFERSIZE-pos <= t){
+		count = BUFFERSIZE-pos;
+	}
+	else{
+		count = t;
+	}
+	int num = copy_from_user(buf+pos,user,count)
+	return num;
 }
-
-
-
-
-
-
-
-
 
 MODULE_LICENSE("GPL");
