@@ -1,0 +1,10 @@
+当出现operation not permitted时，考虑如下：
+1.确定自己编写的设备驱动文件里函数名正确、变量赋值正确、结构体正确
+2.确定自己sudo insmod xxx.ko，否则可能权限不足
+3.关闭secure boot（就是启动界面按F2或者ESC）的那个
+
+
+
+当加载成功并且获得设备号时，测试的时候出现open以后一直返回-1，则考虑是权限问题，进入/dev，
+sudo chmod 777 mychrdev
+
