@@ -17,20 +17,13 @@
 
 //目前只能获得/的所有目录项
 //输出为dstdir和length
-void GetAllDirectory(int fd, struct dirent * dstdir, int * length, int max){
+void GetAllDirectory(void * BigBlock, struct dirent * dstdir, int * length, int max){
     //   /的目录项
-    void * BigBlock = mmap(NULL, BLOCKNUM+BLOCKSIZE*BLOCKNUM, PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
-    printf("GetAllDirectory BigBlock is %d\n",BigBlock);
-    void * nn = BigBlock+BLOCKNUM;
-    printf("nn is %d\n",nn);
+    void * dir_v = BigBlock+BLOCKNUM;
+    struct dirent * dir = (struct dirent *)(dir_v);
 
+    printf("dir is %p",dir);
 
-    struct dirent * dir = (struct dirent *)(nn);
-    printf("dir is %d",dir);
-    //if(dir == NULL || dir == -1){
-        //printf("GetAllDirectory, 内存映射/目录失败");
-   // }
-    //printf('GetAllDirectory dir map is %d',dir);
     int i = 0;
     while(strlen(dir[i].name)!=0 && i<BLOCKSIZE/sizeof(struct dirent)){
         memcpy(&dstdir[i],&dir[i], sizeof(struct dirent));
@@ -38,32 +31,30 @@ void GetAllDirectory(int fd, struct dirent * dstdir, int * length, int max){
     }
     *length = i;
     
-    munmap(dir,BLOCKSIZE);
-    
     return;
 }
 
 
 
-struct dirent GetDirectoryByName(int fd, struct dirent *dir, char * name){
-    if(dir == NULL || dir == (void *)(-1)){
-        printf("GetDirectory, 内存映射/目录失败");
-        close(fd);
-    }
-    struct dirent d;
-    memset(d.name,0,sizeof(d.name));
+int GetDirectoryIndexByName(void * BigBlock, char * name){
+    //   /的目录项
+    void * dir_v = BigBlock+BLOCKNUM;
+    struct dirent * dir = (struct dirent *)(dir_v);
+    printf("dir is %p",dir);
+
+    int index = -1;
     for(int i = 0;i<BLOCKSIZE/sizeof(struct dirent);i++){
         if(strcmp(name,dir[i].name)==0){
-            memcpy(&d,&dir[i],sizeof(d));
+            index = i;
             break;
         }
     }
-    return d;
+    return index;
 }
 
 
 
-int main(){
+int _main(){
     struct dirent dir[32];
     int length = 0;
 
@@ -73,17 +64,26 @@ int main(){
         printf("open filesystem error\n");
         return -1;
     }
-    //void *BigBlock = mmap(NULL,BLOCKNUM + BLOCKSIZE * (BLOCKNUM), PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
-    //printf("BigBlock mapped ok!\n");
+    //获得映射
+    void * BigBlock = mmap(NULL, BLOCKNUM+BLOCKSIZE*BLOCKNUM, PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
 
 
-    GetAllDirectory(fd, dir, &length, 32);
-    printf("length is %d",length);
+    /*测试获得所有目录项函数*/
+    GetAllDirectory(BigBlock, dir, &length, 32);
+    printf("***   Testing GetAllDirectory Function   ***\ndir_length is %d\n",length);
     for(int i = 0;i<length;i++){
-        printf("%s  %s  %d",dir[i].name, dir[i].owner, dir[i].ctime);
+        printf("%s  %s  %ld\n",dir[i].name, dir[i].owner, dir[i].ctime);
     }
     
+    /*测试按照文件名获得目录项*/
+    printf("***   测试GetDirectoryByName   ***");
+    int index = GetDirectoryIndexByName(BigBlock,"tonggege");
+    if(index==-1){
+        printf("不存在该文件，name=%s\n","tonggege");
+    }
+    else{
+        printf("tonggege 查找到， dir index is %d\n",index);
+    }
     close(fd);
-
 }
 

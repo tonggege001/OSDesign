@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "models.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "directory.h": "c",
+        "fcntl.h": "c"
     }
 }

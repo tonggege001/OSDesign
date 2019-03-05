@@ -18,3 +18,15 @@ int updateBlock(char * usageTable, long inode, long state){
     usageTable[inode] = state;
     return 0;
 }
+
+//获取一个新的块号
+long getNewBlockIndex(char * usageTable){
+    for(long i = 0;i<BLOCKNUM;i++){
+        if(usageTable[i]==UNUSED){
+            return i;
+        }
+    }
+    return -1;
+}
+
+

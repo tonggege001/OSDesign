@@ -18,36 +18,31 @@
  * 
  */
 
-void tdelete(char * name){
-    int fd;
-    fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
+void tdelete(int fd, char * name){
 
-    struct dirent * dir = (struct dirent *)mmap(NULL, BLOCKSIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, BLOCKNUM);
-    if(dir == NULL || dir == (void *)(-1)){
-        printf("GetAllDirectory, 内存映射/目录失败");
-        close(fd);
+    void * BigBlock = mmap(NULL,BLOCKNUM+BLOCKNUM*BLOCKSIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
+    if(BigBlock == MAP_FAILED){
+        printf("tdelete, 内存映射");
+        return;
     }
 
-    char * usageTable = (char * )mmap(NULL,BLOCKNUM, PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
-    if(usageTable == NULL || usageTable == (void *)(-1)){
-        printf("内存映射使用表失败");
-        close(fd);
-        return -2;
-    }
+    void * dir_v = BigBlock+BLOCKNUM;
+    struct dirent * dir = (struct dirent *)(dir_v);
+    char * usageTable = (char *)BigBlock;
 
-    struct block * mem = (struct block *)mmap(NULL, BLOCKSIZE * (BLOCKNUM-1),PROT_READ|PROT_WRITE,MAP_SHARED,fd,BLOCKNUM);
-    if(mem == NULL || mem == (void *)(-1)){
-        printf("内存映射使用表失败");
-        close(fd);
-        return -2;
-    }
+    struct block * mem = (struct block *)(dir_v);
 
-    int dirpos;
+
+    int dirpos = -1;
     //查找目录项
     for(int i = 0;i<BLOCKSIZE/sizeof(struct dirent);i++){
         if(strcmp(dir[i].name,name) == 0){
-            dirpos = i;
+            dirpos = i; 
         }
+    }
+    if(dirpos==-1){
+        printf("没有 %s 的目录项\n", name);
+        return;
     }
     int inode = dir[dirpos].inode;  //获得首节点
     //移动目录项
@@ -63,13 +58,21 @@ void tdelete(char * name){
         inode = mem[inode].next;
     }while(inode!=0);
 
-    munmap(usageTable,BLOCKNUM);
-    munmap(dir,BLOCKSIZE);
-    munmap(mem,BLOCKSIZE * (BLOCKNUM-1));
+    munmap(BigBlock,BLOCKNUM);
     close(fd);
-
 }
 
+int main(){
+    int fd = -1;
+    fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
+    if(fd == -1){
+        printf("open filesystem error\n");
+        return -1;
+    }
+    tdelete(fd,"tonggege");
+    return 0;
+
+}
 
 
 

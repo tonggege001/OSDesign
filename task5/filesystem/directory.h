@@ -1,5 +1,6 @@
+#include"models.h"
 
-void GetAllDirectory(int fd, struct dirent * dstdir, int * length, int max);
+//extern void GetAllDirectory(void * BigBlock, struct dirent * dstdir, int * length, int max);
+void GetAllDirectory(void * BigBlock, struct dirent * dstdir, int * length, int max);
 
-
-struct dirent GetDirectoryByName(int fd, struct dirent *dir, char * name);
+extern int GetDirectoryIndexByName(void * BigBlock, char * name);

@@ -3,6 +3,9 @@
  * 
  * 
 */
+#ifndef MODELS_H
+#define MODELS_H
+
 extern const int BLOCKSIZE;
 extern const char * STORAGEPATH;     //存储地址
 extern const int BLOCKNUM;             //块数
@@ -35,7 +38,7 @@ struct block{
     char    content[CONTENTSIZE];       //数据块的内容
 };
 
-
+#endif
 
 
 

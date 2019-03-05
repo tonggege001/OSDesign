@@ -10,7 +10,7 @@
 /**
  * 创建文件或目录
  * 首先需要在/中找到一个空的位置存放目录项文件，然后在空闲块中找到一个空闲块，
- * 最后将目录项写到第0块的相应位置
+ * 最后将目录项写到第0块的相应位置(一个文件至少占用一个空闲块)
  * 
  * 采用内存映射技术修改文件
 */
@@ -72,7 +72,7 @@ int getNewDirentIndex(struct dirent * dir){
 
 //获得一个新的块号
 int getNewBlockInode(char * usageTable){
-    for(int i = 0;i<BLOCKNUM;i++){
+    for(int i = 1;i<BLOCKNUM;i++){
         if(usageTable[i] == UNUSED){
             return i;
         }
