@@ -11,9 +11,11 @@
 
 int main(){
     FILE * f = fopen(STORAGEPATH,"wb");
-    fwrite(&USED,1,sizeof(char),f);     //第一个块已使用，用于保存/的目录项
+    int used = USED;
+    int unused = UNUSED;
+    fwrite(&used,1,sizeof(char),f);     //第一个块已使用，用于保存/的目录项
     for(int i = 1;i<BLOCKNUM;i++){
-        fwrite(&UNUSED,1,sizeof(char),f);
+        fwrite(&unused,1,sizeof(char),f);
     }
 
     char zeros[1024];
@@ -24,6 +26,7 @@ int main(){
         fwrite(zeros,sizeof(char),1024,f);
         fwrite(zeros,sizeof(char),1024,f);
     }
+    fclose(f);
 }
 
 

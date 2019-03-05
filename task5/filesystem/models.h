@@ -12,8 +12,8 @@ const int CONTENTSIZE = 2040;               //内容的大小
 const int REGULAR = 0;      //常规文件
 const int DIRECTORY = 1;    //目录文件
 //文件状态
-extern char USED;
-extern char UNUSED;
+const char USED = 1;
+const char UNUSED = 0;
 
 
 //目录项结构
