@@ -1,3 +1,3 @@
 
 
-void delete(char * name);
+void tdelete(char * name);

@@ -14,8 +14,11 @@
  * 
  * 采用内存映射技术修改文件
 */
+int getNewBlockInode(char * usageTable);
+int getNewDirentIndex(struct dirent * dir);
 
-long create(char * name, char * owner, long type){
+
+long tcreate(char * name, char * owner, long type){
     int fd;     //文件描述符
 
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
@@ -55,6 +58,7 @@ long create(char * name, char * owner, long type){
     munmap(usageTable,BLOCKNUM);
     munmap(dir, BLOCKSIZE);
     close(fd);
+    return 0;
 
 }
 
@@ -81,7 +85,10 @@ int getNewBlockInode(char * usageTable){
 }
 
 
-
+//测试创建文件
+int main(){
+    tcreate("tonggege","tonggege",REGULAR);
+}
 
 
 

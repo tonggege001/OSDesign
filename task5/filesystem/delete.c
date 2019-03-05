@@ -18,7 +18,7 @@
  * 
  */
 
-void delete(char * name){
+void tdelete(char * name){
     int fd;
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
 
