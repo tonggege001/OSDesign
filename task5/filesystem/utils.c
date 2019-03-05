@@ -1,4 +1,5 @@
 #include<time.h>
+#include<stdio.h>
 #include"models.h"
 
 
@@ -11,7 +12,7 @@ long getNowTime(){
 //设置数据块的state状态(USED、UNUSED)
 int updateBlock(char * usageTable, long inode, long state){
     if(inode <0 && inode >=BLOCKNUM){
-        printf("updateBlock error, inode out of range, inode = %d",inode);
+        printf("updateBlock error, inode out of range, inode = %ld",inode);
         return -1;
     }
     usageTable[inode] = state;

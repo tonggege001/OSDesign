@@ -3,17 +3,17 @@
  * 
  * 
 */
-const int BLOCKSIZE = 2048;                 //块大小
-const char * STORAGEPATH = "../BLOCK" ;     //存储地址
-const int BLOCKNUM = 50 * 1024;             //块数
-const int CONTENTSIZE = 2040;               //内容的大小
+extern const int BLOCKSIZE;
+extern const char * STORAGEPATH;     //存储地址
+extern const int BLOCKNUM;             //块数
+#define CONTENTSIZE  2040                   //内容的大小
 
 //文件类型
-const int REGULAR = 0;      //常规文件
-const int DIRECTORY = 1;    //目录文件
+extern const int REGULAR;      //常规文件
+extern const int DIRECTORY;    //目录文件
 //文件状态
-const char USED = 1;
-const char UNUSED = 0;
+extern const char USED;
+extern const char UNUSED;
 
 
 //目录项结构

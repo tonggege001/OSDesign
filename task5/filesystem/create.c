@@ -14,6 +14,8 @@
  * 
  * 采用内存映射技术修改文件
 */
+
+
 int getNewBlockInode(char * usageTable);
 int getNewDirentIndex(struct dirent * dir);
 
@@ -22,30 +24,25 @@ long tcreate(char * name, char * owner, long type){
     int fd;     //文件描述符
 
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
+    printf("open ok, fd is %d\n",fd);
     if(fd == -1){
-        printf("open filesystem error");
+        printf("open filesystem error\n");
         return -1;
     }
+    void *BigBlock = mmap(NULL,BLOCKNUM + BLOCKSIZE * (BLOCKNUM), PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
+    printf("BigBlock mapped ok!\n");
 
-    //使用内存映射解决大文件读写
-    char * usageTable = (char * )mmap(NULL,BLOCKNUM, PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
-    if(usageTable == NULL || usageTable == (void *)(-1)){
-        printf("内存映射使用表失败");
-        close(fd);
-        return -2;
-    }
-
-    //   /的目录项
-    struct dirent * dir = (struct dirent *)mmap(NULL, BLOCKSIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, BLOCKNUM);
-    if(dir == NULL || dir == (void *)(-1)){
-        printf("内存映射/目录失败");
-        munmap(usageTable,BLOCKNUM);
-        close(fd);
-    }
-
+    
+    char * usageTable = (char * )BigBlock;  //使用内存映射解决大文件读写
+    struct dirent * dir = (struct dirent *)(BigBlock+BLOCKNUM);     //   /的目录项
+    printf("BigBlocks is %d, dir is %d",BigBlock, dir);
     int pos = getNewDirentIndex((struct dirent *)(dir));
+    printf("pos is %d\n",pos);
+
+
     //创建目录项
     long inode = getNewBlockInode(usageTable);
+    printf("inode is %d\n",inode);
     updateBlock(usageTable,inode,USED);
     dir[pos].size = 0;
     dir[pos].ctime = getNowTime();
@@ -55,8 +52,7 @@ long tcreate(char * name, char * owner, long type){
     dir[pos].blockcount = 1;
     strcpy(dir[pos].name,name);
     strcpy(dir[pos].owner, owner);
-    munmap(usageTable,BLOCKNUM);
-    munmap(dir, BLOCKSIZE);
+    munmap(BigBlock,BLOCKNUM + BLOCKSIZE * (BLOCKNUM));
     close(fd);
     return 0;
 
