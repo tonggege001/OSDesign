@@ -24,25 +24,19 @@ long tcreate(char * name, char * owner, long type){
     int fd;     //文件描述符
 
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
-    printf("open ok, fd is %d\n",fd);
     if(fd == -1){
         printf("open filesystem error\n");
         return -1;
     }
     void *BigBlock = mmap(NULL,BLOCKNUM + BLOCKSIZE * (BLOCKNUM), PROT_READ|PROT_WRITE, MAP_SHARED, fd,0);
-    printf("BigBlock mapped ok!\n");
 
     
     char * usageTable = (char * )BigBlock;  //使用内存映射解决大文件读写
     struct dirent * dir = (struct dirent *)(BigBlock+BLOCKNUM);     //   /的目录项
-    printf("BigBlocks is %d, dir is %d",BigBlock, dir);
     int pos = getNewDirentIndex((struct dirent *)(dir));
-    printf("pos is %d\n",pos);
-
 
     //创建目录项
     long inode = getNewBlockInode(usageTable);
-    printf("inode is %d\n",inode);
     updateBlock(usageTable,inode,USED);
     dir[pos].size = 0;
     dir[pos].ctime = getNowTime();
@@ -57,6 +51,13 @@ long tcreate(char * name, char * owner, long type){
     return 0;
 
 }
+
+//拷贝文件
+long tcp(void * BigBlock, char * srcname, char * dstname){
+
+}
+
+
 
 
 //获得一个插入新的目录项的位置
@@ -82,7 +83,7 @@ int getNewBlockInode(char * usageTable){
 
 
 //测试创建文件
-int main(){
+int main_create(){
     tcreate("tonggege","tonggege",REGULAR);
 }
 

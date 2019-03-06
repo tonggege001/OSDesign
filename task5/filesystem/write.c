@@ -143,7 +143,7 @@ long twrite(void * BigBlock, char * filename,char * buf, int length){
     return count;
 }
 
-int main(){
+int main_write(){
     int fd = -1;
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
     if(fd == -1){
@@ -155,8 +155,8 @@ int main(){
         printf("tdelete, 内存映射");
         return -1;
     }
-    char * cc = "a b c d e f g h i j k l m n o p q r s t u";
-    int num = twrite(BigBlock,"tonggege",cc,strlen(cc)+1);
+    char * cc = "哈哈哈";
+    int num = twrite(BigBlock,"tonggege2",cc,strlen(cc)+1);
     printf("num = %d, len(cc) = %d",num,strlen(cc)+1);
     munmap(BigBlock,BLOCKNUM+BLOCKNUM*BLOCKSIZE);
     close(fd);

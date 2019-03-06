@@ -42,3 +42,5 @@ linkread:models.c models.h utils.c utils.h directory.h directory.c read.c read.h
 	cc -o read.run	models.c utils.c directory.c read.c
 
 
+
+

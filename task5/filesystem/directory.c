@@ -22,8 +22,6 @@ void GetAllDirectory(void * BigBlock, struct dirent * dstdir, int * length, int 
     void * dir_v = BigBlock+BLOCKNUM;
     struct dirent * dir = (struct dirent *)(dir_v);
 
-    printf("dir is %p",dir);
-
     int i = 0;
     while(strlen(dir[i].name)!=0 && i<BLOCKSIZE/sizeof(struct dirent)){
         memcpy(&dstdir[i],&dir[i], sizeof(struct dirent));
@@ -40,8 +38,6 @@ int GetDirectoryIndexByName(void * BigBlock, char * name){
     //   /的目录项
     void * dir_v = BigBlock+BLOCKNUM;
     struct dirent * dir = (struct dirent *)(dir_v);
-    printf("dir is %p",dir);
-
     int index = -1;
     for(int i = 0;i<BLOCKSIZE/sizeof(struct dirent);i++){
         if(strcmp(name,dir[i].name)==0){
@@ -52,9 +48,33 @@ int GetDirectoryIndexByName(void * BigBlock, char * name){
     return index;
 }
 
+int ChangeName(void * BigBlock, char * srcName, char * destName){
+    if(strlen(srcName)==0) return -1;
+    if(strlen(destName)==0)return -1;
+    void * dir_v = BigBlock+BLOCKNUM;
+    struct dirent * dir = (struct dirent *)(dir_v);
+
+    int srcindex = -1;
+    srcindex = GetDirectoryIndexByName(BigBlock,srcName);
+    if(srcindex < 0){  //查找到源文件
+        printf("srcindex is -1\n");
+        return -1;
+    }
+
+    int destindex = GetDirectoryIndexByName(BigBlock, destName);
+    if(destindex > 0 ){   //查找到目标文件，说明命名重复
+        printf("destindex is not -1\n");
+        return -1;
+    }
+    memcpy(dir[srcindex].name, destName,strlen(destName)+1);
+
+}
 
 
-int _main(){
+
+
+
+int main_directory(){
     struct dirent dir[32];
     int length = 0;
 

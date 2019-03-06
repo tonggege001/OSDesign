@@ -3,6 +3,13 @@
         "models.h": "c",
         "stdlib.h": "c",
         "directory.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "mman.h": "c",
+        "time.h": "c",
+        "types.h": "c",
+        "utils.h": "c",
+        "stat.h": "c",
+        "read.h": "c",
+        "string.h": "c"
     }
 }

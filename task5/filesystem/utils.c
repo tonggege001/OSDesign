@@ -1,13 +1,23 @@
 #include<time.h>
 #include<stdio.h>
 #include"models.h"
-
+#include<time.h>
+#include<string.h>
 
 long getNowTime(){
     time_t now;
     time(&now);
     return now;
 }
+
+char * Time2String(time_t ts){
+    struct tm * lt = localtime (&ts);
+    char * ttt = asctime(lt);
+    //memcpy(timestr,ttt ,strlen(ttt)+1);
+    return ttt;
+}
+
+
 
 //设置数据块的state状态(USED、UNUSED)
 int updateBlock(char * usageTable, long inode, long state){

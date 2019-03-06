@@ -13,9 +13,12 @@ long tread(void * BigBlock, char * filename, char * buf, int length){
     int count = 0;
     long dirindex = GetDirectoryIndexByName(BigBlock, filename);
 
-    char * usageTable = (char *)BigBlock;
-    struct dirent * dir = (struct dirent *)(BigBlock + BLOCKNUM);
-    struct block * blo = (struct block *)(BigBlock+BLOCKNUM);
+    void * usageTable_v = BigBlock;
+    void * dir_v = BigBlock + BLOCKNUM;
+    void * blo_v = BigBlock + BLOCKNUM;
+    char * usageTable = (char *)usageTable_v;
+    struct dirent * dir = (struct dirent *)dir_v;
+    struct block * blo = (struct block *)blo_v;
 
     if(dir[dirindex].size<length)   length = dir[dirindex].size;
 
@@ -39,7 +42,7 @@ long tread(void * BigBlock, char * filename, char * buf, int length){
     return count;
 }
 
-int main(){
+int main_read(){
     int fd = -1;
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
     if(fd == -1){
@@ -53,7 +56,7 @@ int main(){
     }
     char buf[100];
     //char * cc = "a b c d e f g h i j k l m n o p q r s t u";
-    int num = tread(BigBlock,"tonggege",buf,100);
+    int num = tread(BigBlock,"tonggege2",buf,100);
     printf("num = %d, len(cc) = %d\n",num,100);
     printf("buf is %s\n",buf);
     munmap(BigBlock,BLOCKNUM+BLOCKNUM*BLOCKSIZE);

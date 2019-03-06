@@ -1,5 +1,5 @@
 
 
-void tdelete(char * name);
+void tdelete(int fd, char * name);
 
 

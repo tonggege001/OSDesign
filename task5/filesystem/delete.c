@@ -59,10 +59,9 @@ void tdelete(int fd, char * name){
     }while(inode!=0);
 
     munmap(BigBlock,BLOCKNUM);
-    close(fd);
 }
 
-int main(){
+int main_delete(){
     int fd = -1;
     fd = open(STORAGEPATH, O_RDWR|O_CREAT, 0666);
     if(fd == -1){
