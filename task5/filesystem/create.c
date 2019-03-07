@@ -52,14 +52,6 @@ long tcreate(char * name, char * owner, long type){
 
 }
 
-//拷贝文件
-long tcp(void * BigBlock, char * srcname, char * dstname){
-
-}
-
-
-
-
 //获得一个插入新的目录项的位置
 int getNewDirentIndex(struct dirent * dir){
     for(int i = 0;i<BLOCKSIZE/sizeof(struct dirent);i++){

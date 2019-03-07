@@ -86,7 +86,6 @@ long _twrite(void * BigBlock, char * filename, int off, char * buf, int length){
 long twrite(void * BigBlock, char * filename,char * buf, int length){
     int count = 0;
     long dirindex = GetDirectoryIndexByName(BigBlock, filename);
-    printf("dirindex = %d\n",dirindex);
 
 
     void * _usageTable = BigBlock;
@@ -98,7 +97,6 @@ long twrite(void * BigBlock, char * filename,char * buf, int length){
 
     //释放除第一个i节点的所有数据块
     int p = blo[dir[dirindex].inode].next;
-    printf("p = %d\n",p);
     blo[dirindex].next = 0;
     while(p){
         int q = p;

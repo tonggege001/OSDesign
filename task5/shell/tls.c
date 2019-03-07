@@ -25,7 +25,6 @@ int main(){
 
     char ctime[40];
     char utime[40];
-    //printf("\n%s\t\t%s\t\t%s\t\t%s\t\t\t\t%s\t\t\t\t%s\t\t\n","filename","owner","size","create_time", "update_time","type");
     printf("\n%-15s%-15s%-10s%-30s%-30s%-10s\n","filename","owner","size","create_time", "update_time","type");
     for(int i = 0;i<length;i++){
         

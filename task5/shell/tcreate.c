@@ -1,5 +1,5 @@
 #include "../filesystem/create.h"
-#include "models.h"
+#include "../filesystem/models.h"
 int main(int argc, char * argv[]){
     if(argc == 0 || argc == 1){
         printf("参数错误\n");

@@ -20,6 +20,10 @@ long tread(void * BigBlock, char * filename, char * buf, int length){
     struct dirent * dir = (struct dirent *)dir_v;
     struct block * blo = (struct block *)blo_v;
 
+    /**
+     * 
+     * 
+     */ 
     if(dir[dirindex].size<length)   length = dir[dirindex].size;
 
     int bIndex = dir[dirindex].inode;

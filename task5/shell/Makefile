@@ -1,11 +1,11 @@
 
-linkshelltls:
+linkshellls:
 	cc -o tls ../filesystem/models.c ../filesystem/utils.c ../filesystem/directory.c tls.c
 
-linkshelltcreate:
+linkshellcreate:
 	cc -o tcreate ../filesystem/models.c ../filesystem/utils.c ../filesystem/create.c tcreate.c
 
-linkshelltdelete:
+linkshelldelete:
 	cc -o tdelete ../filesystem/models.c ../filesystem/utils.c ../filesystem/delete.c tdelete.c
 
 linkshellwrite:
@@ -16,3 +16,7 @@ linkshellread:
 
 linkshellchname:
 	cc -o tchname ../filesystem/models.c ../filesystem/utils.c ../filesystem/directory.c tchname.c 
+
+linkshellcp:
+	cc -o tcp ../filesystem/models.c ../filesystem/utils.c ../filesystem/directory.c ../filesystem/read.c ../filesystem/write.c ../filesystem/create.c tcp.c
+
