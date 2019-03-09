@@ -6,24 +6,16 @@
 #include <QStandardItemModel>
 #include <QTimer>
 #include <QDebug>
+#include <QPoint>
+#include <signal.h>
+#include <QSplineSeries>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-
-    //test
-    /*ProcessInfoModel a;
-    a.Pid = "2564";
-    a.TidList.append("2565");
-    a.CPUUsage = 0.5;
-    a.MemUsage = 0.2;
-    a.NetUsage = 0.7;
-    a.DiskReadSpeed = 1.2;
-    this->ProcessInfo.append(a);
-*/
 
     MakeMainWindowLayout();
     Fresh();
@@ -49,7 +41,6 @@ void MainWindow::MakeMainWindowLayout(){
     ui->MemFrame->setVisible(false);
     ui->NetFrame->setGeometry(220,110,770,460);
     ui->NetFrame->setVisible(false);
-
     ui->ProcessTable->setGeometry(20,100,970,470);
     ui->ProcessTable->setVisible(false);
     ui->ProcessTable->setSortingEnabled(true);
@@ -59,6 +50,30 @@ void MainWindow::MakeMainWindowLayout(){
     ui->ProcessTable->setItemDelegateForColumn(1,new ProgressBarDelegate(this));
     ui->ProcessTable->setItemDelegateForColumn(2,new ProgressBarDelegate(this));
     this->pv = pv;
+    ui->ProcessTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->ProcessTable->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->ProcessTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->ProcessTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(ui->ProcessTable,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(slotContextMenu(QPoint)));
+    menu = new QMenu(ui->ProcessTable);
+    action = new QAction("结束进程",ui->ProcessTable);
+    menu->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(StopProcess()));
+
+    ui->ChartsFrame->setGeometry(20,100,970,470);
+    ui->ChartsFrame->setVisible(false);
+    series = new QSplineSeries(this);
+    series->setName("spline");
+    qchart = new QChart();
+    qchart->legend()->hide();
+    qchart->addSeries(series);
+    qchart->setTitle("CPU占比分析图");
+    qchart->createDefaultAxes();
+    qchart->axes(Qt::Vertical).first()->setRange(0, 1);
+    qchart->axes(Qt::Horizontal).first()->setRange(0,30);
+    chartView = new QChartView(qchart);
+    chartView->setRenderHint(QPainter::Antialiasing);
+    ui->ChartsLayout->addWidget(chartView);
 }
 
 /*
@@ -76,7 +91,7 @@ void MainWindow::on_pushButton_clicked()
     ui->CPUFrame->setVisible(true);
     ui->NetFrame->setVisible(false);
     ui->MemFrame->setVisible(false);
-
+    ui->ChartsFrame->setVisible(false);
     ui->ProcessTable->setVisible(false);
 }
 
@@ -91,7 +106,7 @@ void MainWindow::on_pushButton_2_clicked()
     ui->CPUFrame->setVisible(false);
     ui->NetFrame->setVisible(false);
     ui->MemFrame->setVisible(false);
-
+    ui->ChartsFrame->setVisible(false);
     ui->ProcessTable->setVisible(true);
 }
 
@@ -231,7 +246,8 @@ bool update_process_cmd(ProcessInfoModel & pim){
     }
     QTextStream in(&file);
     QString str = in.readLine();
-    pim.CMD = str;
+    QStringList qlst = str.split('/');
+    pim.CMD = qlst[qlst.length()-1];
     return true;
 }
 
@@ -363,7 +379,24 @@ void MainWindow::Fresh(){
     emit this->pv->layoutChanged();
     emit this->pv->dataChanged(pv->index(0,0),pv->index(ProcessInfo.length()-1,1));
 
-
+    QList<QPointF> q = series->points();
+    if(q.length()>30){
+        q.removeAt(0);
+        for(int i = 0;i<q.length();i++){
+            qreal x = q.at(i).x();
+            qreal y = q.at(i).y();
+            x = x-1;
+            q.removeAt(i);
+            q.insert(i,QPointF(x,y));
+        }
+    }
+    q.append(QPointF(q.length(),CPUInfo.CPUUsage));
+    while(series->count() >0){
+        series->remove(series->count()-1);
+    }
+    for(QPointF ppp:q){
+        series->append(ppp);
+    }
     //cpu attr
     QString cpuUsageStr = ui->cpuUsageLabel->text().split('\n')[0]+"\n"+
             QString::asprintf("%.2lf",CPUInfo.CPUUsage*100)+"%";
@@ -449,4 +482,41 @@ void MainWindow::Fresh(){
 
 }
 
+void MainWindow::StopProcess(){
+    QModelIndex qml = ui->ProcessTable->indexAt(this->pos);
 
+    qDebug()<<"qml.data()"<<qml.data()<<endl;
+    QString pidStr = qml.data().toString();
+    bool ok;
+    int pid = pidStr.toInt(&ok,10);
+    if(!ok){
+        return;
+    }
+    qDebug()<<"pid is<<"<<pid<<endl;
+    kill(pid, SIGTERM);
+}
+
+
+void MainWindow::slotContextMenu(QPoint pos){
+    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+    this->pos = pos;
+    menu->exec(QCursor::pos());
+
+
+}
+
+
+void MainWindow::on_CPU_anal_button_clicked()
+{
+    ui->CPUInfoButton->setVisible(false);
+    ui->MemInfoButton->setVisible(false);
+    ui->NetworkInfoButton->setVisible(false);
+
+    ui->line->setVisible(false);
+
+    ui->CPUFrame->setVisible(false);
+    ui->NetFrame->setVisible(false);
+    ui->MemFrame->setVisible(false);
+    ui->ChartsFrame->setVisible(true);
+    ui->ProcessTable->setVisible(false);
+}

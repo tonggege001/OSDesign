@@ -37,10 +37,10 @@ public:
     QFrame *CPUFrame;
     QWidget *gridLayoutWidget;
     QGridLayout *CPULayout;
-    QLabel *cpuLogicProcessLabel;
     QLabel *cpuUsageLabel;
-    QLabel *cpuSpeedLabel;
     QLabel *cpuPhysicalProcessLabel;
+    QLabel *cpuLogicProcessLabel;
+    QLabel *cpuSpeedLabel;
     QLabel *cpuProcudureLabel;
     QLabel *cpuMaxProcessLabel;
     QLabel *label_5;
@@ -67,6 +67,10 @@ public:
     QLabel *NetTCPNumLabel;
     QLabel *NetUDPDatagramLabel;
     QTableView *ProcessTable;
+    QPushButton *CPU_anal_button;
+    QFrame *ChartsFrame;
+    QWidget *gridLayoutWidget_4;
+    QGridLayout *ChartsLayout;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -124,29 +128,15 @@ public:
         CPULayout->setContentsMargins(11, 11, 11, 11);
         CPULayout->setObjectName(QString::fromUtf8("CPULayout"));
         CPULayout->setContentsMargins(0, 0, 0, 0);
-        cpuLogicProcessLabel = new QLabel(gridLayoutWidget);
-        cpuLogicProcessLabel->setObjectName(QString::fromUtf8("cpuLogicProcessLabel"));
-        QFont font1;
-        font1.setPointSize(14);
-        cpuLogicProcessLabel->setFont(font1);
-        cpuLogicProcessLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
-
-        CPULayout->addWidget(cpuLogicProcessLabel, 3, 0, 1, 1);
-
         cpuUsageLabel = new QLabel(gridLayoutWidget);
         cpuUsageLabel->setObjectName(QString::fromUtf8("cpuUsageLabel"));
+        QFont font1;
+        font1.setPointSize(14);
         cpuUsageLabel->setFont(font1);
         cpuUsageLabel->setTextFormat(Qt::PlainText);
         cpuUsageLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
 
         CPULayout->addWidget(cpuUsageLabel, 2, 0, 1, 1);
-
-        cpuSpeedLabel = new QLabel(gridLayoutWidget);
-        cpuSpeedLabel->setObjectName(QString::fromUtf8("cpuSpeedLabel"));
-        cpuSpeedLabel->setFont(font1);
-        cpuSpeedLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
-
-        CPULayout->addWidget(cpuSpeedLabel, 2, 1, 1, 1);
 
         cpuPhysicalProcessLabel = new QLabel(gridLayoutWidget);
         cpuPhysicalProcessLabel->setObjectName(QString::fromUtf8("cpuPhysicalProcessLabel"));
@@ -154,6 +144,20 @@ public:
         cpuPhysicalProcessLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
 
         CPULayout->addWidget(cpuPhysicalProcessLabel, 3, 1, 1, 1);
+
+        cpuLogicProcessLabel = new QLabel(gridLayoutWidget);
+        cpuLogicProcessLabel->setObjectName(QString::fromUtf8("cpuLogicProcessLabel"));
+        cpuLogicProcessLabel->setFont(font1);
+        cpuLogicProcessLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
+
+        CPULayout->addWidget(cpuLogicProcessLabel, 3, 0, 1, 1);
+
+        cpuSpeedLabel = new QLabel(gridLayoutWidget);
+        cpuSpeedLabel->setObjectName(QString::fromUtf8("cpuSpeedLabel"));
+        cpuSpeedLabel->setFont(font1);
+        cpuSpeedLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
+
+        CPULayout->addWidget(cpuSpeedLabel, 2, 1, 1, 1);
 
         cpuProcudureLabel = new QLabel(gridLayoutWidget);
         cpuProcudureLabel->setObjectName(QString::fromUtf8("cpuProcudureLabel"));
@@ -176,7 +180,7 @@ public:
 
         MemFrame = new QFrame(centralWidget);
         MemFrame->setObjectName(QString::fromUtf8("MemFrame"));
-        MemFrame->setGeometry(QRect(910, 570, 21, 21));
+        MemFrame->setGeometry(QRect(900, 570, 16, 16));
         MemFrame->setFrameShape(QFrame::StyledPanel);
         MemFrame->setFrameShadow(QFrame::Raised);
         gridLayoutWidget_2 = new QWidget(MemFrame);
@@ -314,6 +318,23 @@ public:
         ProcessTable = new QTableView(centralWidget);
         ProcessTable->setObjectName(QString::fromUtf8("ProcessTable"));
         ProcessTable->setGeometry(QRect(830, 570, 21, 21));
+        CPU_anal_button = new QPushButton(centralWidget);
+        CPU_anal_button->setObjectName(QString::fromUtf8("CPU_anal_button"));
+        CPU_anal_button->setGeometry(QRect(470, 20, 141, 51));
+        CPU_anal_button->setFont(font);
+        ChartsFrame = new QFrame(centralWidget);
+        ChartsFrame->setObjectName(QString::fromUtf8("ChartsFrame"));
+        ChartsFrame->setGeometry(QRect(800, 570, 21, 21));
+        ChartsFrame->setFrameShape(QFrame::StyledPanel);
+        ChartsFrame->setFrameShadow(QFrame::Raised);
+        gridLayoutWidget_4 = new QWidget(ChartsFrame);
+        gridLayoutWidget_4->setObjectName(QString::fromUtf8("gridLayoutWidget_4"));
+        gridLayoutWidget_4->setGeometry(QRect(10, 0, 981, 491));
+        ChartsLayout = new QGridLayout(gridLayoutWidget_4);
+        ChartsLayout->setSpacing(6);
+        ChartsLayout->setContentsMargins(11, 11, 11, 11);
+        ChartsLayout->setObjectName(QString::fromUtf8("ChartsLayout"));
+        ChartsLayout->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralWidget);
 
         retranslateUi(MainWindow);
@@ -329,10 +350,10 @@ public:
         CPUInfoButton->setText(QApplication::translate("MainWindow", "CPU\344\277\241\346\201\257", nullptr));
         MemInfoButton->setText(QApplication::translate("MainWindow", "\345\206\205\345\255\230\344\277\241\346\201\257", nullptr));
         NetworkInfoButton->setText(QApplication::translate("MainWindow", "\347\275\221\347\273\234\344\277\241\346\201\257", nullptr));
-        cpuLogicProcessLabel->setText(QApplication::translate("MainWindow", "\351\200\273\350\276\221\345\244\204\347\220\206\345\231\250\346\225\260\347\233\256:", nullptr));
         cpuUsageLabel->setText(QApplication::translate("MainWindow", "\345\210\251\347\224\250\347\216\207:", nullptr));
-        cpuSpeedLabel->setText(QApplication::translate("MainWindow", "\351\200\237\345\272\246:", nullptr));
         cpuPhysicalProcessLabel->setText(QApplication::translate("MainWindow", "\347\211\251\347\220\206\345\244\204\347\220\206\345\231\250\345\222\214\346\240\270\345\277\203\346\225\260\347\233\256:", nullptr));
+        cpuLogicProcessLabel->setText(QApplication::translate("MainWindow", "\351\200\273\350\276\221\345\244\204\347\220\206\345\231\250\346\225\260\347\233\256:", nullptr));
+        cpuSpeedLabel->setText(QApplication::translate("MainWindow", "\351\200\237\345\272\246:", nullptr));
         cpuProcudureLabel->setText(QApplication::translate("MainWindow", "\350\277\233\347\250\213\346\225\260:", nullptr));
         cpuMaxProcessLabel->setText(QApplication::translate("MainWindow", "\346\234\200\345\244\247\350\277\233\347\250\213\346\225\260:", nullptr));
         label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:600;\">CPU\344\277\241\346\201\257\344\270\200\350\247\210</span></p></body></html>", nullptr));
@@ -352,6 +373,7 @@ public:
         NetIPLabel->setText(QApplication::translate("MainWindow", "\346\234\254\346\234\272IP:", nullptr));
         NetTCPNumLabel->setText(QApplication::translate("MainWindow", "TCP\350\277\236\346\216\245\346\225\260:", nullptr));
         NetUDPDatagramLabel->setText(QApplication::translate("MainWindow", "UDP\346\225\260\346\215\256\346\212\245\351\200\237\345\272\246:", nullptr));
+        CPU_anal_button->setText(QApplication::translate("MainWindow", "CPU\346\233\262\347\272\277\345\210\206\346\236\220", nullptr));
     } // retranslateUi
 
 };

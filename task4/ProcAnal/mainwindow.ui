@@ -173,21 +173,6 @@
       <property name="spacing">
        <number>1</number>
       </property>
-      <item row="3" column="0">
-       <widget class="QLabel" name="cpuLogicProcessLabel">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>逻辑处理器数目:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="cpuUsageLabel">
         <property name="font">
@@ -206,21 +191,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="cpuSpeedLabel">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>速度:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="1">
        <widget class="QLabel" name="cpuPhysicalProcessLabel">
         <property name="font">
@@ -230,6 +200,36 @@
         </property>
         <property name="text">
          <string>物理处理器和核心数目:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="cpuLogicProcessLabel">
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>逻辑处理器数目:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="cpuSpeedLabel">
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>速度:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -279,10 +279,10 @@
    <widget class="QFrame" name="MemFrame">
     <property name="geometry">
      <rect>
-      <x>910</x>
+      <x>900</x>
       <y>570</y>
-      <width>21</width>
-      <height>21</height>
+      <width>16</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -574,6 +574,51 @@
       <height>21</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QPushButton" name="CPU_anal_button">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>20</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>CPU曲线分析</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="ChartsFrame">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>570</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>981</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="ChartsLayout"/>
+    </widget>
    </widget>
   </widget>
  </widget>
