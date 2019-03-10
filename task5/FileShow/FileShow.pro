@@ -26,21 +26,39 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
-    directory.cpp \
-    regularfile.cpp
+    mainwindow.cpp \
+    regularfile.cpp \
+    tggdirectory.cpp \
+    createdialog.cpp
 
 HEADERS += \
         mainwindow.h \
-    directory.h \
-    regularfile.h
+    regularfile.h \
+    tggdirectory.h \
+    createdialog.h
 
 FORMS += \
         mainwindow.ui \
-    directory.ui \
-    regularfile.ui
+    regularfile.ui \
+    tggdirectory.ui \
+    createdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../syscall/release/ -lsysdirectory
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../syscall/debug/ -lsysdirectory
+else:unix: LIBS += -L$$PWD/../syscall/ -lsysdirectory
+
+INCLUDEPATH += $$PWD/../syscall
+DEPENDPATH += $$PWD/../syscall
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../syscall/release/libsysdirectory.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../syscall/debug/libsysdirectory.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../syscall/release/sysdirectory.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../syscall/debug/sysdirectory.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../syscall/libsysdirectory.a

@@ -4,23 +4,23 @@
 #include <QWidget>
 
 namespace Ui {
-class directory;
+class TGGdirectory;
 }
 
-class directory : public QWidget
+class TGGdirectory : public QWidget
 {
     Q_OBJECT
 public:
     int filecount;
     int totalSize;
     int spaceSize;
-    
+
 public:
-    explicit directory(QWidget *parent = nullptr);
-    ~directory();
+    explicit TGGdirectory(QWidget *parent = nullptr);
+    ~TGGdirectory();
 
 private:
-    Ui::directory *ui;
+    Ui::TGGdirectory *ui;
 };
 
 #endif // DIRECTORY_H

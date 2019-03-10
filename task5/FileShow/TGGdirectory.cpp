@@ -1,9 +1,9 @@
-#include "directory.h"
+#include "TGGdirectory.h"
 #include "ui_directory.h"
 
-directory::directory(QWidget *parent) :
+TGGdirectory::TGGdirectory(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::directory)
+    ui(new Ui::TGGdirectory)
 {
     ui->setupUi(this);
     filecount = 0;
@@ -11,7 +11,7 @@ directory::directory(QWidget *parent) :
     spaceSize = 0;
 }
 
-directory::~directory()
+TGGdirectory::~TGGdirectory()
 {
     delete ui;
 }
