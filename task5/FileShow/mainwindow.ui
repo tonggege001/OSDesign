@@ -29,9 +29,9 @@
       <height>551</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout" rowminimumheight="0" columnminimumwidth="0">
+    <layout class="QGridLayout" name="gridLayout">
      <property name="sizeConstraint">
-      <enum>QLayout::SetMinimumSize</enum>
+      <enum>QLayout::SetDefaultConstraint</enum>
      </property>
     </layout>
    </widget>

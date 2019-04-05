@@ -62,7 +62,6 @@ void sysReadFile(char * filename, char * buf, long maxLen){
 
     munmap(BigBlock, BLOCKNUM + BLOCKSIZE * (BLOCKNUM));
     close(fd);
-    free(buf);
 
 }
 

@@ -24,19 +24,20 @@ public:
     void fresh();
 
     void setAttr(QString filename, QString owner, QString size, QString createTime);
+
 signals:
         void clicked();
         void changed();
 
 private:
     Ui::regularfile *ui;
-
-    void mousePressEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private slots:
     void openslot();
     void renameslot();
     void deleteslot();
+    void Change();
 
 protected:
 

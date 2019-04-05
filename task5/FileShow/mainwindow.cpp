@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(createAction, SIGNAL(triggered()), this, SLOT(createfileslot()));
     connect(flushAction,SIGNAL(triggered()),this,SLOT(flushslot()));
     connect(attrAction,SIGNAL(triggered()),this,SLOT(attrslot()));
+
 }
 
 MainWindow::~MainWindow()
@@ -50,12 +51,17 @@ void MainWindow::LoadDirectory(){
     if(dir == nullptr)
         dir = new TGGdirectory(this);
     ui->gridLayout->removeWidget(dir);
-    while(fileWidgetList.length()!=0){
-        ui->gridLayout->removeWidget(fileWidgetList.at(0));
-        regularfile * tmp = fileWidgetList.at(0);
-        fileWidgetList.removeAt(0);
-        delete tmp;
+
+
+    QLayoutItem *child;
+    while ((child = ui->gridLayout->takeAt(0)) != 0) {
+        if(child->widget())
+        {
+            child->widget()->setParent(nullptr);
+        }
+          delete child;
     }
+
     if(this->dir == nullptr){
         dir = new TGGdirectory(this);
     }
@@ -74,14 +80,18 @@ void MainWindow::LoadFiles(){
 
     //remove old
     qDebug()<<"remove old"<<endl;
-    while(fileWidgetList.length()!=0){
-        ui->gridLayout->removeWidget(fileWidgetList.at(0));
-        regularfile * tmp = fileWidgetList.at(0);
-        fileWidgetList.removeAt(0);
-        //delete tmp;
+    QLayoutItem *child;
+    while ((child = ui->gridLayout->takeAt(0)) != 0) {
+        if(child->widget())
+        {
+            child->widget()->setParent(nullptr);
+        }
+          delete child;
     }
+
     qDebug()<<"add new"<<endl;
     //add new
+
     for(struct dirent d:this->direntList){
         regularfile * reg = new regularfile(this->ui->gridLayoutWidget);
         reg->filename = d.name;
@@ -91,13 +101,20 @@ void MainWindow::LoadFiles(){
         reg->size = QString::number(d.size);
 
         reg->fresh();
-        this->fileWidgetList.append(reg);
         int num = this->ui->gridLayout->count();
         this->ui->gridLayout->addWidget(reg,num/10,num % 10);
 
         connect(reg,SIGNAL(changed()),this,SLOT(changedslot()));
 
     }
+    int num2 = this->ui->gridLayout->count();
+
+    int row = (num2 == 0)?0:(num2-1)/10;
+    int col = num2 % 10;
+    for(int j = 0;j<10;j++)
+        this->ui->gridLayout->addItem(new QSpacerItem(120,300),row+1,j);
+
+
 
 }
 
@@ -125,13 +142,11 @@ void MainWindow::freshData(){
 }
 
 void MainWindow::on_actionback_triggered()
-{   this->freshData();
+{
+    this->freshData();
     if(state == 1){
         this->LoadDirectory();
         state = 0;
-    }
-    else{
-        this->LoadFiles();
     }
 }
 

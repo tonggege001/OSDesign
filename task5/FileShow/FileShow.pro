@@ -29,19 +29,22 @@ SOURCES += \
     mainwindow.cpp \
     regularfile.cpp \
     tggdirectory.cpp \
-    createdialog.cpp
+    createdialog.cpp \
+    openpanel.cpp
 
 HEADERS += \
         mainwindow.h \
     regularfile.h \
     tggdirectory.h \
-    createdialog.h
+    createdialog.h \
+    openpanel.h
 
 FORMS += \
         mainwindow.ui \
     regularfile.ui \
     tggdirectory.ui \
-    createdialog.ui
+    createdialog.ui \
+    openpanel.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

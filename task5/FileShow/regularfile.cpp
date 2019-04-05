@@ -1,6 +1,6 @@
 #include "regularfile.h"
 #include "ui_regularfile.h"
-
+#include "openpanel.h"
 #include <QAction>
 #include <QDateTime>
 #include <QInputDialog>
@@ -17,9 +17,9 @@ regularfile::regularfile(QWidget *parent) :
     owner = "";
     size = "";
     createtime = "";
-    QAction * openAction = new QAction("打开", this);
-    QAction * renameAction = new QAction("重命名",this);
-    QAction * deleteAction = new QAction("删除",this);
+    QAction * openAction = new QAction("打开", nullptr);
+    QAction * renameAction = new QAction("重命名",nullptr);
+    QAction * deleteAction = new QAction("删除",nullptr);
 
     connect(openAction,SIGNAL(triggered()),this,SLOT(openslot()));
     connect(renameAction, SIGNAL(triggered()), this, SLOT(renameslot()));
@@ -43,14 +43,16 @@ void regularfile::setAttr(QString filename, QString owner, QString size, QString
 
 
 //double clicked
-void regularfile::mousePressEvent(QMouseEvent *e)
-{
-
+void regularfile::mouseDoubleClickEvent(QMouseEvent * event){
+    qDebug()<<"mouseDoubleClickEvent"<<filename<<endl;
+    QString filename = this->filename;
+    OpenPanel *op = new OpenPanel(this,filename);
+    connect(op,SIGNAL(changed()),this,SLOT(Change()));
+    op->show();
 }
 
 void regularfile::openslot()
 {
-
 }
 
 void regularfile::renameslot()
@@ -77,9 +79,14 @@ void regularfile::deleteslot()
     char buf[50];
     strcpy(buf,this->filename.toStdString().c_str());
     qDebug()<<this->filename;
-    //sysDeleteFile(buf);
+    sysDeleteFile(buf);
     emit this->changed();
 
+}
+
+void regularfile::Change()
+{
+    emit changed();
 }
 
 void regularfile::fresh()
